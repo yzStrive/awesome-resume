@@ -1,12 +1,19 @@
 import Prism from "prismjs"
-import text from "./text"
+import area,{resume} from "./text"
+import showdown from 'showdown'
+import "babel-polyfill"  //parcel bug https://github.com/parcel-bundler/parcel/issues/871
 (() => {
-  const area = document.querySelector(".area")
-  const resume = document.querySelector('.resume')
+  const converter = new showdown.Converter()
+  const _area = document.querySelector(".area")
+  const _resume = document.querySelector('.resume')
   const _style = document.createElement("style")
+  const renderType = {
+    area:'area',
+    resume:'resume'
+  }
   document.head.appendChild(_style)
-  const length = text.length
-  let _text = ""
+  const length = area.length
+  let _text = ''
   let interval
   const readCharset = async (index,content,type) => {
     let speed = 1
@@ -15,17 +22,27 @@ import text from "./text"
     if (index > length) {
       return 
     }
-    await render(charset)
-    await readCharset(index, content)
+    await render(charset,type)
+    await readCharset(index, content,type)
   }
-  const render = charset =>
+  const handleAreaHTML = (_text,area) => {
+    const _html = Prism.highlight(_text, Prism.languages.css)
+    _style.innerHTML = _text
+    writeHTMLAndSetScrollTop(area,_html)
+  }
+  const handleResumeMD = (_text, resume) => {
+    const MdConvertHTML = converter.makeHtml(_text)
+    writeHTMLAndSetScrollTop(resume,MdConvertHTML)
+  }
+  const writeHTMLAndSetScrollTop = (ele,html)=>{
+    ele.innerHTML = html
+    ele.scrollTop = ele.scrollHeight
+  }
+  const render = (charset,type) =>
     new Promise(resolve => {
       setTimeout(() => {
         _text += charset
-        const _html = Prism.highlight(_text, Prism.languages.css)
-        _style.innerHTML = _text
-        area.innerHTML = _html
-        area.scrollTop = area.scrollHeight
+        type === renderType.area?handleAreaHTML(_text,_area):handleResumeMD(_text,_resume)
         if (charset === "？" || charset === "！" || charset === "，") {
           interval = 1000
         } else {
@@ -34,7 +51,9 @@ import text from "./text"
         resolve()
       }, interval)
   });
-  (async area => {
-    await readCharset(0, text)
-  })(area)
+  (async () => {
+    await readCharset(0, area,renderType.area)
+    _text = ''
+    await readCharset(0,resume,renderType.resume)
+  })()
 })()

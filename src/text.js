@@ -1,4 +1,4 @@
-const text = `
+const area = `
 /* 
 * 这是一个空白页面
 * 0，
@@ -90,10 +90,27 @@ html {
   background: white; color: #222;
   width: 40vw; height:500px; 
   border: 1px solid;
-  overflow: auto;
+  overflow: scroll;
   color: rgb(222,222,222); 
   background: rgb(12, 16, 26);
 }
 `
+const resume = `
+罗松林
+=============
+- 前端
+- yzstrive@gmail.com
 
-export default text
+技能
+=============
+- 熟练使用html css js
+- 对angular,react,vue有一定了解
+- 对前端模块化开发有自己的理解
+
+
+链接
+=============
+- [本项目的源代码](https://github.com/yzstrive/awesome-resume)
+`
+export default area
+export { resume }
