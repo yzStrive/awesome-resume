@@ -5,3 +5,5 @@ dist/
 #editor
 .vscode/
 
+*cache/
+build/

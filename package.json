@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "webpack": "webpack --config webpack.config.js --colors "
+    "webpack": "webpack --config webpack.config.js --colors ",
+    "start": "parcel src/index.html --open",
+    "build": "parcel build src/index.html -d dist --no-cache "
   },
   "author": "<yzStrive@gmail.com>",
   "license": "MIT",
