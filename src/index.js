@@ -3,6 +3,9 @@ import area,{resume} from "./text"
 import showdown from 'showdown'
 import "babel-polyfill"  //parcel bug https://github.com/parcel-bundler/parcel/issues/871
 (() => {
+
+  const length = area.length
+  const resume_len = resume.length
   const converter = new showdown.Converter()
   const _area = document.querySelector(".area")
   const _resume = document.querySelector('.resume')
@@ -12,14 +15,13 @@ import "babel-polyfill"  //parcel bug https://github.com/parcel-bundler/parcel/i
     resume:'resume'
   }
   document.head.appendChild(_style)
-  const length = area.length
   let _text = ''
   let interval
   const readCharset = async (index,content,type) => {
     let speed = 1
     let charset = content.slice(index, index + speed)
     index += speed
-    if (index > length) {
+    if (index > (type === renderType.area?length:resume_len)) {
       return 
     }
     await render(charset,type)
